@@ -1,0 +1,374 @@
+class Noeuds:
+    def __init__(self, val):
+        self.val = val
+        self.suivant = None
+
+class Liste:
+    def __init__(self,l = None):
+        self.l = l
+      
+    def is_empty(self):
+      if self.l is None:
+        return True
+      return False
+      
+    def error(self):
+      print("La liste est vide\n")
+      
+    def display(self):
+      if self.is_empty() == True:
+        self.error()
+      else:
+        noeud = self.l
+        while noeud:
+            print(noeud.val)
+            noeud = noeud.suivant
+
+    def add_last(self, val):
+        noeudnouv = Noeuds(val)
+        if self.is_empty() == True:
+            self.l = noeudnouv
+            return
+
+        noeudderni = self.l
+        while noeudderni.suivant:
+            noeudderni = noeudderni.suivant
+        noeudderni.suivant = noeudnouv
+
+    def add_first(self, val):
+          if self.is_empty() == True:
+            self.l = val
+            return
+          else:
+            noeudnouv = Noeuds(val)
+            noeudnouv.suivant = self.l
+            self.l = noeudnouv
+
+    def contains(self, value):
+        if self.is_empty() == True:
+            return False
+        else:
+          noeud = self.l
+          while noeud:
+              if noeud.val == value:
+                  return True
+              noeud = noeud.suivant 
+        return False
+
+    def insert_after_node(self, element, val):
+
+        if not element:
+            self.add_first(val)
+            return
+
+        noeudnouv = Noeuds(val)
+
+        noeudnouv.suivant = element.suivant
+        element.suivant = noeudnouv
+
+    def delete_node(self, key):
+
+        noeud = self.l
+
+        if noeud and noeud.val == key:
+            self.l = noeud.suivant
+            noeud = None
+            return
+
+        prev = None
+        while noeud and noeud.val != key:
+            prev = noeud
+            noeud = noeud.suivant
+
+        if noeud is None:
+            return
+
+        prev.suivant = noeud.suivant
+        noeud = None
+
+    def delete_node_at_pos(self, pos):
+
+        noeud = self.l
+
+        if pos == 0:
+            self.l = noeud.suivant
+            noeud = None
+            return
+
+        prev = None
+        count = 1
+        while noeud and count != pos:
+            prev = noeud
+            noeud = noeud.suivant
+            count += 1
+
+        if noeud is None:
+            return
+
+        prev.suivant = noeud.suivant
+        noeud = None
+
+    def len_iterative(self):
+
+        count = 0
+        noeud = self.l
+
+        while noeud:
+            count += 1
+            noeud = noeud.suivant
+        return count
+
+    def len_recursive(self, node):
+        noeud = self.l
+        if noeud is None:
+            return 0
+        return 1 + self.len_recursive(noeud.suivant)
+
+
+    def reverse(self):
+        preced, actu = None, self.l
+        while actu is not None:
+            next = actu.suivant
+            actu.suivant = preced
+            prev = actu
+            actu = next
+        self.l = preced
+
+    def reverse_recu(self,head):
+        if head is None or head.suivant is None:
+            return head
+        smallHead = self.reverse_recu(head.suivant)
+        head.suivant.suivant = head
+        head.suivant = None
+        return smallHead
+
+
+n = Noeuds(6)
+l = Liste()
+l.display(),l.add_last(5),l.add_first(6),l.add_last(7),l.display(),l.contains(5)
+import random
+for i in range(10):
+  l.add_last(random.randint(1,10))
+
+
+"""
+I) Quelques défintion
+Une structure de données est une manière de définir, stocker, accéder, modifier des données. Exemples : tableaux, tuples, dictionnaires...
+Nous étudierons dans cette séquence les structures de données piles et files
+
+a) Définition 
+* L'interface d'une structure de données décrit de quelle manière on peut la manipuler. Par exemple en utilisant delete_first de la liste chainée definie dans la séquence précédente
+* L'implémentation de la structure de données contient le code de ses méthodes. Il n'est pas nécessaire de connaitre l'implémentation des méthodes , pour manipuler des structures de données
+* Un type abstrait décrit essentiellement une interface indépendamment du langage de programation
+
+II) Piles
+Une pile ou stack ou LIFO est une structure de données dont l'interface est constituée des méthodes suivantes :
+* is_empty, qui retourne True ou False suivant que la pile soit vide ou non
+* empiler ou push, qui permet d'empiler un élément au sommet de la pile en temps constant
+* dépiler ou pop, qui permet de dépiler/renvoyer l'élément le plus récent de la pile en un temps constant. On peut choisir de supprimer ou non le sommet de la pile
+
+
+stk = Pile() # On crée un objet en memoire
+
+stk.is_empty() # stk fait appel a sa methode is_empty() qui retourne True ici ( car à la ligne précédente on à crée l'objet Pile vide )
+
+stk.pop() # Retourne une erreur car la pile est vide
+
+stk.push(2) # ajoute 2 à la pile
+stk.push(3) # ajoute 3 à la pile
+
+stk.pop() # on enleve le dernier element ( donc 3 ) 
+
+"""
+class Stack:
+    def __init__(self):
+        self.l = []
+
+    def __str__(self):
+      p = Stack()
+      while len(self.l) != 0: 
+        p.append = self.l.pop()
+      while p.nombre_element() != 0:
+        print(self.pop(p))
+
+
+    def is_empty(self):
+        return self.l == []
+
+    def push(self, v):
+        self.l.append(v)
+
+    def pop(self):
+        return self.l.pop()
+
+    def nombre_element(self):
+        return self.l[len(self.l)-1]
+
+    def taille(self):
+        return len(self.l)
+
+a = Stack()
+
+class StackLinked:
+    def __init__(self):
+        self.l = Liste()
+
+    def __str__(self):
+      p = Stack()
+      while len(self.l) != 0: 
+        p.append = self.l.pop()
+      while len(p) != 0:
+        print(self.pop(p))
+
+
+    def is_empty(self):
+        return self.l.is_empty
+
+    def push(self, v):
+        self.l.add_last(v)
+
+  
+    def pop(self):
+        if self.l is None:
+            return None
+        else:
+            pop = self.l.data
+            self.l = self.l.suivant
+            return pop
+      
+
+    def nombre_element(self):
+        return self.l.len_iterative()-1
+
+    def taille(self):
+        return self.l.len_iterative()
+
+a = StackLinked()
+
+"""
+
+III) Files
+Une file ou queue ou FIFO est une structure de données dont son interface est constituée des méthodes suivantes :
+* is_empty, file vide, qui retourne True or False si la file est vide ou non
+* enfiler ou enqueue, qui permet d'ajouter un élement au sommet de la file en temps constant
+* défiler ou dequeue, qui permet de renoyer l'élément le plus ancien dela file en un temps constant. On peut choisir de supprimer ou non le sommet de la file 
+
+In = Queue() # On crée un objet en memoire
+
+In.is_empty() # In fait appel a sa methode is_empty() qui retourne True ici ( car à la ligne précédente on à crée l'objet Pile vide )
+
+In.dequeue() # Retourne une erreur car la pile est vide
+
+In.enqueue(2) # ajoute 2 à la pile
+In.enqueue(3) # ajoute 3 à la pile
+
+In.dequeue() # on enleve le dernier element, le plus ancien ( donc 2 ) 
+
+
+
+  
+"""
+
+class Queue:
+    def __init__(self):
+        self.l = []
+
+    def isEmpty(self):
+        return self.l == []
+
+    def enqueue(self, item):
+        self.l.insert(0,item)
+
+    def dequeue(self):
+        return self.l.pop()
+
+    def size(self):
+        return len(self.l)
+
+class QueueLinked:
+    def __init__(self):
+        self.l = Liste()
+
+    def is_empty(self):
+        return self.l.is_empty()
+
+    def enqueue(self, v):
+        self.l.add_first(v)
+
+    def dequeue(self):
+        return self.l.delete_at_pose(self.l.len_iterative())
+
+ql = QueueLinked()
+q = Queue()
+s = Stack()
+sl = StackLinked()
+
+if __name__ == '__main__':
+  ################# Stack #######################
+  print("\n\n\n\n\n\n\n\n\n\n\n")
+  if s.is_empty == True:
+    print("La liste est vide : Test bon")
+  s.push(1)
+  s.push(2)
+  s.push(3)
+  print("\n Nombre d'élèments et taille :")
+  print(s.nombre_element())
+  print(s.taille())
+  print(s.pop())
+  print(s.pop())
+  print("\n Nombre d'élèments et taille :")
+  print(s.nombre_element())
+  print(s.taille())
+  print(s.pop())
+
+
+  ################# Stack Linked #######################
+  print("\n\n\n\n\n\n\n\n\n\n\n")
+  if sl.is_empty == True:
+    print("La liste est vide : Test bon")
+  sl.push(1)
+  sl.push(2)
+  sl.push(3)
+  print("\n Nombre d'élèments et taille :")
+  print(sl.nombre_element())
+  print(sl.taille())
+  print(sl.pop())
+  print(sl.pop())
+  print("\n Nombre d'élèments et taille :")
+  print(sl.nombre_element())
+  print(sl.taille())
+  print(sl.pop())
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class Stack:
+    def __init__(self):
+        self.head = None
+
+    def push(self, data):
+        if self.head is None:
+            self.head = Node(data)
+        else:
+            new_node = Node(data)
+            new_node.next = self.head
+            self.head = new_node
+
+
+    def peek(self):
+        if self.head is None:
+            return None
+        return self.head.data
+
+    def __str__(self):
+        ret_str = " "
+        temp = self.head
+        while temp:
+            ret_str += str(temp.data) + "-->"
+            temp = temp.next
+        ret_str += "None"
+        return ret_str
+
+# https://dlatreyte.github.io/terminales-nsi/chap-4/5-jeu-vie/#corrig%C3%A9
